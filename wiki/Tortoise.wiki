@@ -23,4 +23,8 @@ Neste momento o Tortoise SVN vai baixar a versão mais recente do T2Ti ERP em De
    1. Basta clicar com o botão direito do mouse no diretório em que está o Infra, e escolher a opção SVN Update.
 
 
-= p =
+= É possível deixar o Tortoise no idioma português do Brasil =
+
+   1. Você pode baixar e instalar o Language Pack para pt_br na mesma página onde baixou o Tortoise SVN;
+   2. Para modificar a linguagem, abra o Windows Explorer, clique com o botão direito do mouse em qualquer pasta, escolha a opção Tortoise SVN, opção Settings;
+   3. Escolha o idioma desejado e clique em OK. 
