@@ -9,6 +9,7 @@ http://tortoisesvn.net/downloads.html
 = Se você já possui o Tortoise SVN instalado =
 
 1. Abra o Windows Explorer, crie uma pasta ou vá até o diretório onde deseja baixar os fontes do T2Ti ERP em Delphi;
+
 2. Clique com o botão direito do mouse, e escolha a opção SVN Checkout. O tortoise abrirá uma janela;
 3. No campo URL of repository, informe o caminho do repositório do T2Ti ERP em Delphi: http://t2ti-erp-delphi.googlecode.com/svn/trunk/;
 4. No campo Checkout directory, informe o diretório onde o T2Ti ERP em Delphi será baixado;
