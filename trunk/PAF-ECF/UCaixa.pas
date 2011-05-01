@@ -485,6 +485,10 @@ begin
   FCaixa.Top := 0;
   FCaixa.Width := Configuracao.ResolucaoVO.Largura;
   FCaixa.Height := Configuracao.ResolucaoVO.Altura;
+
+  // Ao mudar a resolução de 1024x768 para 800x600, tem um bug da qual o panel
+  // não é redimencionado, a linha abaixo resolve este problema.
+  FCaixa.AutoSize := True;
 end;
 
 function TFCaixa.VerificaVendaAberta: Boolean;
