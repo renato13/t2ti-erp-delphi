@@ -58,8 +58,8 @@ Símbolo : Significado
 
 Versão 1.0 - Beta  01/05/11
 ---------------------------
-[-] Correção no ajuste do tamanho do formulários ao mudar da resolução 1024x768 para
-    800x600, a imagem era mudada, mas o tamanho do formulário não.
+[-] Correção na procedure "SetResolucao" ao mudar da resolução 1024x768 para
+    800x600, a imagem mudava, mas o tamanho do formulário e do panel não.
 
 
 Versão 1.0 - Beta  29/04/11
