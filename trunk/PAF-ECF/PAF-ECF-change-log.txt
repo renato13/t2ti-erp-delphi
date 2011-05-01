@@ -57,9 +57,9 @@ Símbolo : Significado
 
 Versão 1.0 - Beta  01/05/11
 ---------------------------
-[-] Correção no método "SetResolucao" ao mudar da resolução 1024x768 para
+[-] Método "SetResolucao" correção no  ao mudar da resolução 1024x768 para
     800x600, a imagem mudava, mas o tamanho do formulário e do panel não.
-[*] No método "PegaConfiguracao", se acontecer algum erro não mostrava mensagem 
+[*] Método "PegaConfiguracao", se acontecer algum erro não mostrava mensagem 
     nenhuma ao usuário, modifiquei para se acontecer mostrar uma mensagem de erro.
 
 Versão 1.0 - Beta  29/04/11
