@@ -30,7 +30,7 @@ OTHER DEALINGS IN THE SOFTWARE.
        The author may be contacted at:
            t2ti.com@gmail.com</p>
 
-@author Albert Eije (T2Ti.COM) | José Rodrigues
+@author Albert Eije (T2Ti.COM)
 @version 1.0
 *******************************************************************************}
 
