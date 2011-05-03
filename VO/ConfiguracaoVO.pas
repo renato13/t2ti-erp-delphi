@@ -79,9 +79,9 @@ type
     FCONFIGURACAO_BALANCA: String;
 
     FBalanca_IdentificadorBalanca:string;
-    FBalanca_DigitosUsadosCodigoBalanca: Integer;
-    FBalanca_DigitosUsadosPrecoQtde: Integer;
-    FBalanca_vPesoOuValor:string;
+ //   FBalanca_DigitosUsadosCodigoBalanca: Integer;
+  //  FBalanca_DigitosUsadosPrecoQtde: Integer;
+  //  FBalanca_vPesoOuValor:string;
     FBalanca_Modelo: Integer;
     FBalanca_HandShaking :Integer;
     FBalanca_Parity :Integer;
@@ -90,7 +90,8 @@ type
     FBalanca_BaudRate :Integer;
     FBalanca_PortaSerial :string;
     FBalanca_TimeOut:Integer;
-    FBalanca_TipoConfiguracaoBalanca:Integer;
+    FBalanca_TipoConfiguracaoBalanca:string;
+   // FBalanca_TipoConfiguracaoBalanca:Integer;
     // modificar   //acrescentar
 
 
@@ -132,9 +133,9 @@ type
 
 
     property BalancaIdentificadorBalanca:string         read FBalanca_IdentificadorBalanca        write FBalanca_IdentificadorBalanca;
-    property BalancaDigitosUsadosCodigoBalanca: Integer read FBalanca_DigitosUsadosCodigoBalanca  write FBalanca_DigitosUsadosCodigoBalanca;
-    property BalancaDigitosUsadosPrecoQtde: Integer     read FBalanca_DigitosUsadosPrecoQtde      write FBalanca_DigitosUsadosPrecoQtde;
-    property BalancavPesoOuValor:string                 read FBalanca_vPesoOuValor                write FBalanca_vPesoOuValor;
+ //   property BalancaDigitosUsadosCodigoBalanca: Integer read FBalanca_DigitosUsadosCodigoBalanca  write FBalanca_DigitosUsadosCodigoBalanca;
+//    property BalancaDigitosUsadosPrecoQtde: Integer     read FBalanca_DigitosUsadosPrecoQtde      write FBalanca_DigitosUsadosPrecoQtde;
+//    property BalancavPesoOuValor:string                 read FBalanca_vPesoOuValor                write FBalanca_vPesoOuValor;
     property BalancaModelo: Integer                     read FBalanca_Modelo                      write FBalanca_Modelo;
     property BalancaHandShaking :Integer                read FBalanca_HandShaking                 write FBalanca_HandShaking;
     property BalancaParity :Integer                     read FBalanca_Parity                      write FBalanca_Parity;
@@ -143,7 +144,9 @@ type
     property BalancaBaudRate :Integer                   read FBalanca_BaudRate                    write FBalanca_BaudRate;
     property BalancaPortaSerial :string                 read FBalanca_PortaSerial                 write FBalanca_PortaSerial;
     property BalancaTimeOut:Integer                     read FBalanca_TimeOut                     write FBalanca_TimeOut;
-    property BalancaTipoConfiguracaoBalanca:Integer     read FBalanca_TipoConfiguracaoBalanca     write FBalanca_TipoConfiguracaoBalanca;
+    property BalancaTipoConfiguracaoBalanca:string      read FBalanca_TipoConfiguracaoBalanca     write FBalanca_TipoConfiguracaoBalanca;
+
+  //  property BalancaTipoConfiguracaoBalanca:Integer     read FBalanca_TipoConfiguracaoBalanca     write FBalanca_TipoConfiguracaoBalanca;
     // modificar   //acrescentar
 
 
