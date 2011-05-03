@@ -8806,7 +8806,11 @@ object FCaixa: TFCaixa
     Porta = 'COM2'
     Intervalo = 2000
     OnLePeso = ACBrBAL1LePeso
-    Left = 641
+    Left = 609
+    Top = 32
+  end
+  object ACBrInStore1: TACBrInStore
+    Left = 681
     Top = 32
   end
 end
