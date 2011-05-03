@@ -1215,10 +1215,6 @@ object FConfiguracao: TFConfiguracao
     object TabSheet3: TTabSheet
       Caption = 'Formas de Pagamento'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Label28: TLabel
         Left = 11
         Top = 7
@@ -1395,54 +1391,27 @@ object FConfiguracao: TFConfiguracao
         Height = 84
         Caption = ' Leitura do  C'#243'digo de barra impresso pela balan'#231'a  '
         TabOrder = 0
-        object Label37: TLabel
-          Left = 19
-          Top = 46
-          Width = 157
-          Height = 16
-          Caption = 'Identificador da Balanca'
-        end
         object Label38: TLabel
-          Left = 344
+          Left = 188
           Top = 23
           Width = 208
           Height = 16
           Caption = 'Tipo de configura'#231#227'o da Balan'#231'a'
         end
-        object cmbIdentificadorBalanca: TComboBox
-          Left = 182
-          Top = 43
-          Width = 43
-          Height = 24
-          ItemIndex = 0
-          TabOrder = 0
-          Text = '2 '
-          OnChange = cmbIdentificadorBalancaChange
-          Items.Strings = (
-            '2 '
-            '3'
-            '4'
-            '5'
-            '6'
-            '7'
-            '8'
-            '9')
-        end
         object cmbTipoConfiguracaoBalanca: TComboBox
-          Left = 344
+          Left = 188
           Top = 43
           Width = 213
           Height = 24
-          ItemIndex = 0
-          TabOrder = 1
-          Text = 'A - 2 C C C C 0 T T T T T T DV '
+          TabOrder = 0
+          Text = '2CCCC0TTTTTTDV '
           OnChange = cmbTipoConfiguracaoBalancaChange
           Items.Strings = (
-            'A - 2 C C C C 0 T T T T T T DV '
-            'B - 2 C C C C 0 0 P P P P P DV '
-            'C - 2 C C C C C T T T T T T DV'
-            'D - 2 C C C C C 0 P P P P P DV '
-            'E - 2 C C C C C C P P P P P DV ')
+            '2CCCC0TTTTTTDV '
+            '2CCCC00PPPPPDV '
+            '2CCCCCTTTTTTDV'
+            '2CCCCC0PPPPPDV '
+            '2CCCCCCPPPPPDV ')
         end
       end
       object GroupBox3: TGroupBox
@@ -1517,7 +1486,7 @@ object FConfiguracao: TFConfiguracao
           ItemIndex = 0
           TabOrder = 0
           Text = 'Nenhuma'
-          OnChange = cmbBalancaChange
+          OnChange = cmbTipoConfiguracaoBalancaChange
           Items.Strings = (
             'Nenhuma'
             'Filizola'
@@ -1534,7 +1503,7 @@ object FConfiguracao: TFConfiguracao
           ItemIndex = 0
           TabOrder = 1
           Text = 'COM1'
-          OnChange = cmbPortaSerialChange
+          OnChange = cmbTipoConfiguracaoBalancaChange
           Items.Strings = (
             'COM1'
             'COM2'
@@ -1554,7 +1523,7 @@ object FConfiguracao: TFConfiguracao
           ItemIndex = 5
           TabOrder = 2
           Text = '4800'
-          OnChange = cmbBaudRateChange
+          OnChange = cmbTipoConfiguracaoBalancaChange
           Items.Strings = (
             '110'
             '300'
@@ -1578,7 +1547,7 @@ object FConfiguracao: TFConfiguracao
           ItemIndex = 3
           TabOrder = 3
           Text = '8'
-          OnChange = cmbDataBitsChange
+          OnChange = cmbTipoConfiguracaoBalancaChange
           Items.Strings = (
             '5'
             '6'
@@ -1594,7 +1563,7 @@ object FConfiguracao: TFConfiguracao
           ItemIndex = 0
           TabOrder = 4
           Text = 'none'
-          OnChange = cmbParityChange
+          OnChange = cmbTipoConfiguracaoBalancaChange
           Items.Strings = (
             'none'
             'odd'
@@ -1611,7 +1580,7 @@ object FConfiguracao: TFConfiguracao
           ItemIndex = 0
           TabOrder = 5
           Text = 's1'
-          OnChange = cmbStopBitsChange
+          OnChange = cmbTipoConfiguracaoBalancaChange
           Items.Strings = (
             's1'
             's1,5'
@@ -1627,7 +1596,7 @@ object FConfiguracao: TFConfiguracao
           ItemIndex = 0
           TabOrder = 6
           Text = 'Nenhum'
-          OnChange = cmbHandShakingChange
+          OnChange = cmbTipoConfiguracaoBalancaChange
           Items.Strings = (
             'Nenhum'
             'XON/XOFF'
@@ -1641,7 +1610,7 @@ object FConfiguracao: TFConfiguracao
           Height = 24
           TabOrder = 7
           Text = '2000'
-          OnChange = editTimeOutChange
+          OnChange = cmbTipoConfiguracaoBalancaChange
           OnKeyPress = editTimeOutKeyPress
         end
         object DBEdit20: TDBEdit

@@ -162,8 +162,6 @@ type
     QFormasPagamentoPERMITE_TROCO: TStringField;
     TabSheet4: TTabSheet;
     GroupBox2: TGroupBox;
-    cmbIdentificadorBalanca: TComboBox;
-    Label37: TLabel;
     cmbTipoConfiguracaoBalanca: TComboBox;
     Label38: TLabel;
     GroupBox3: TGroupBox;
@@ -172,7 +170,6 @@ type
     Label30: TLabel;
     cmbPortaSerial: TComboBox;
     Label31: TLabel;
-    cmbBaudRate: TComboBox;
     Label32: TLabel;
     cmbDataBits: TComboBox;
     Label33: TLabel;
@@ -185,6 +182,7 @@ type
     editTimeOut: TEdit;
     CDSConfiguracaoCONFIGURACAO_BALANCA: TStringField;
     DBEdit20: TDBEdit;
+    cmbBaudRate: TComboBox;
     procedure confirma;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure botaoConfirmaClick(Sender: TObject);
@@ -199,18 +197,9 @@ type
     procedure SpeedButton5Click(Sender: TObject);
     procedure editTimeOutKeyPress(Sender: TObject; var Key: Char);
     procedure PreparaConfiguracaoBalancaParaGravacao;
-    procedure cmbIdentificadorBalancaChange(Sender: TObject);
-    procedure cmbTipoConfiguracaoBalancaChange(Sender: TObject);
-    procedure cmbBalancaChange(Sender: TObject);
-    procedure cmbPortaSerialChange(Sender: TObject);
-    procedure cmbBaudRateChange(Sender: TObject);
-    procedure cmbDataBitsChange(Sender: TObject);
-    procedure cmbParityChange(Sender: TObject);
-    procedure cmbStopBitsChange(Sender: TObject);
-    procedure cmbHandShakingChange(Sender: TObject);
-    procedure editTimeOutChange(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure CarregaEditsConfiguracaoBalanca;
+    procedure cmbTipoConfiguracaoBalancaChange(Sender: TObject);
   private
     { Private declarations }
   public
@@ -235,46 +224,6 @@ end;
 
 
 
-procedure TFConfiguracao.cmbBalancaChange(Sender: TObject);
-begin
-  PreparaConfiguracaoBalancaParaGravacao;
-end;
-
-procedure TFConfiguracao.cmbBaudRateChange(Sender: TObject);
-begin
-  PreparaConfiguracaoBalancaParaGravacao;
-end;
-
-procedure TFConfiguracao.cmbDataBitsChange(Sender: TObject);
-begin
-  PreparaConfiguracaoBalancaParaGravacao;
-end;
-
-procedure TFConfiguracao.cmbHandShakingChange(Sender: TObject);
-begin
-  PreparaConfiguracaoBalancaParaGravacao;
-end;
-
-procedure TFConfiguracao.cmbIdentificadorBalancaChange(Sender: TObject);
-begin
-  PreparaConfiguracaoBalancaParaGravacao;
-end;
-
-procedure TFConfiguracao.cmbParityChange(Sender: TObject);
-begin
-  PreparaConfiguracaoBalancaParaGravacao;
-end;
-
-procedure TFConfiguracao.cmbPortaSerialChange(Sender: TObject);
-begin
-  PreparaConfiguracaoBalancaParaGravacao;
-end;
-
-procedure TFConfiguracao.cmbStopBitsChange(Sender: TObject);
-begin
-  PreparaConfiguracaoBalancaParaGravacao;
-end;
-
 procedure TFConfiguracao.cmbTipoConfiguracaoBalancaChange(Sender: TObject);
 begin
   PreparaConfiguracaoBalancaParaGravacao;
@@ -295,15 +244,10 @@ begin
   Close;
 end;
 
-procedure TFConfiguracao.editTimeOutChange(Sender: TObject);
-begin
-  PreparaConfiguracaoBalancaParaGravacao;
-end;
-
 procedure TFConfiguracao.editTimeOutKeyPress(Sender: TObject; var Key: Char);
 begin
- // if not key in['0..9'] then
-  //key:=#0;
+  // if  key in['0'..'9'] = false then
+  //  key:=#0;
 end;
 
 procedure TFConfiguracao.FormActivate(Sender: TObject);
@@ -330,9 +274,6 @@ begin
   CDSPosicaoComponentes.MasterSource := DSResolucao;
   CDSPosicaoComponentes.MasterFields := 'ID';
   CDSPosicaoComponentes.IndexFieldNames := 'ID_ECF_RESOLUCAO';
-
-  CarregaEditsConfiguracaoBalanca;
-
 end;
 
 procedure TFConfiguracao.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -344,6 +285,7 @@ end;
 procedure TFConfiguracao.FormShow(Sender: TObject);
 begin
   PageControl1.ActivePageIndex:=0;
+  CarregaEditsConfiguracaoBalanca;
 end;
 
 procedure TFConfiguracao.PaletaCoresColorChange(Sender: TObject);
@@ -418,66 +360,25 @@ begin
 end;
 
 // como este form não tem um padrão definido fiz outro padrão...
-procedure TFConfiguracao.PreparaConfiguracaoBalancaParaGravacao;   // Acrecentar
-var ConfiguracaoBalanca,  DigitosUsadosCodigoBalanca, DigitosUsadosPrecoQtde, PesoOuValor  :string;
-    TipoConfiguracao: integer;
+procedure TFConfiguracao.PreparaConfiguracaoBalancaParaGravacao;   // Modificar
 begin
-
-  TipoConfiguracao:=cmbTipoConfiguracaoBalanca.ItemIndex;
-
-  case TipoConfiguracao of
-    0: begin
-      DigitosUsadosCodigoBalanca:='4';
-      DigitosUsadosPrecoQtde:='6';
-      PesoOuValor:='VALOR';
-    end;
-    1: begin
-      DigitosUsadosCodigoBalanca:='4';
-      DigitosUsadosPrecoQtde:='5';
-      PesoOuValor:='PESO';
-    end;
-    2: begin
-      DigitosUsadosCodigoBalanca:='5';
-      DigitosUsadosPrecoQtde:='6';
-      PesoOuValor:='VALOR';
-    end;
-    3: begin
-      DigitosUsadosCodigoBalanca:='5';
-      DigitosUsadosPrecoQtde:='5';
-      PesoOuValor:='PESO';
-    end;
-    4: begin
-      DigitosUsadosCodigoBalanca:='6';
-      DigitosUsadosPrecoQtde:='5';
-      PesoOuValor:='PESO';
-    end;
-  end;
-
-  ConfiguracaoBalanca := IntToStr(cmbBalanca.ItemIndex)+'|'+
-                         trim(cmbIdentificadorBalanca.Text)+'|'+
-                         DigitosUsadosCodigoBalanca+'|'+
-                         DigitosUsadosPrecoQtde+'|'+
-                         PesoOuValor+'|'+
-                         IntToStr(cmbHandShaking.ItemIndex)+'|'+
-                         IntToStr(cmbParity.ItemIndex)+'|'+
-                         IntToStr(cmbStopBits.ItemIndex)+'|'+
-                         trim(cmbDataBits.Text)+'|'+
-                         trim(cmbBaudRate.Text)+'|'+
-                         trim(cmbPortaSerial.Text)+'|'+
-                         trim(editTimeOut.Text)+'|'+
-                         IntToStr(cmbTipoConfiguracaoBalanca.ItemIndex)+'|';
-
-
    CDSConfiguracao.Edit;
-   DBEdit20.Text:=ConfiguracaoBalanca;
+   DBEdit20.Text:=IntToStr(cmbBalanca.ItemIndex)+'|'+
+                  copy(cmbTipoConfiguracaoBalanca.Text,1,1)+'|'+
+                  IntToStr(cmbHandShaking.ItemIndex)+'|'+
+                  IntToStr(cmbParity.ItemIndex)+'|'+
+                  IntToStr(cmbStopBits.ItemIndex)+'|'+
+                  trim(cmbDataBits.Text)+'|'+
+                  trim(cmbBaudRate.Text)+'|'+
+                  trim(cmbPortaSerial.Text)+'|'+
+                  trim(editTimeOut.Text)+'|'+
+                  trim(cmbTipoConfiguracaoBalanca.Text)+'|';
 
 end;
 
-procedure TFConfiguracao.CarregaEditsConfiguracaoBalanca;    // Acrecentar
+procedure TFConfiguracao.CarregaEditsConfiguracaoBalanca;    // Modificar
 var
   Linha:string;
-  PosBarra: integer;
-
 begin
   Linha:= DBEdit20.Text;
 
@@ -485,18 +386,15 @@ begin
   begin
     try
       cmbBalanca.ItemIndex := StrToInt(DevolveConteudoDelimitado('|',Linha));
-      cmbIdentificadorBalanca.Text := DevolveConteudoDelimitado('|',Linha);
-      DevolveConteudoDelimitado('|',Linha);
-      DevolveConteudoDelimitado('|',Linha);
       DevolveConteudoDelimitado('|',Linha);
       cmbHandShaking.ItemIndex := StrToInt(DevolveConteudoDelimitado('|',Linha));
       cmbParity.ItemIndex := StrToInt(DevolveConteudoDelimitado('|',Linha));
       cmbStopBits.ItemIndex := StrToInt(DevolveConteudoDelimitado('|',Linha));
       cmbDataBits.ItemIndex := StrToInt(DevolveConteudoDelimitado('|',Linha));
-      cmbBaudRate.ItemIndex := StrToInt(DevolveConteudoDelimitado('|',Linha));
+      cmbBaudRate.Text := DevolveConteudoDelimitado('|',Linha);
       cmbPortaSerial.Text := DevolveConteudoDelimitado('|',Linha);
       editTimeOut.Text := DevolveConteudoDelimitado('|',Linha);
-      cmbTipoConfiguracaoBalanca.ItemIndex := StrToInt(DevolveConteudoDelimitado('|',Linha));
+      cmbTipoConfiguracaoBalanca.Text := DevolveConteudoDelimitado('|',Linha);
     except
       cmbBalanca.ItemIndex := 0;
       exit;

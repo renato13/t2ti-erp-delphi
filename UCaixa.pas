@@ -30,7 +30,7 @@ OTHER DEALINGS IN THE SOFTWARE.
        The author may be contacted at:
            t2ti.com@gmail.com</p>
 
-@author Albert Eije (T2Ti.COM) | José Rodrigues
+@author Albert Eije (T2Ti.COM) | Jose Rodrigues de Oliveira Junior
 @version 1.0
 *******************************************************************************}
 
@@ -44,7 +44,7 @@ Generics.Collections, Graphics, Controls, Forms, jpeg, StdCtrls, Buttons, Biblio
 JvLabel, JvValidateEdit, JvgListBox, JvListBox, JvBaseDlg, JvCalc, JvExExtCtrls,
 JvExtComponent, JvClock, JvExStdCtrls, JvEdit, JvExControls, VendaCabecalhoVO,
 VendaDetalheVO, MovimentoVO, ConfiguracaoVO, ClienteVO, ACBrBase, ACBrECF, TypInfo,
-Constantes, ACBrBAL, ACBrDevice;   //  acrescentar  ACBrBAL, ACBrDevice;
+Constantes, ACBrBAL, ACBrDevice, ACBrInStore;
 
 type
   TFCaixa = class(TForm)
@@ -122,7 +122,9 @@ type
     Timer2: TTimer;
     editCodigo: TEdit;
     ACBrBAL1: TACBrBAL;
-    function DesmembraCodigoDigitado(var CodigoDeBarraOuDescricaoOuIdProduto: string; var Preco, Qtde: Extended): integer;    procedure MensagemDeProdutoNaoEncontrado;
+    ACBrInStore1: TACBrInStore;
+    procedure DesmembraCodigoDigitado(CodigoDeBarraOuDescricaoOuIdProduto: string);  // modificar
+    procedure MensagemDeProdutoNaoEncontrado;
     procedure ConsultaProdutoId(id: Integer);
     procedure FechaMenuOperacoes;
     procedure CarregaPreVenda(Numero:String);
@@ -132,8 +134,7 @@ type
     procedure ConfiguraACBr;
     procedure CompoeItemParaVenda;
     procedure ParametrosIniciaisVenda;
-   // procedure ConsultaProduto(Codigo:String);
-    procedure ConsultaProduto(Codigo:String;Tipo:integer);
+    procedure ConsultaProduto(Codigo:String;Tipo:integer);  // modificar
     procedure ImprimeCabecalhoBobina;
     procedure ImprimeItemBobina;
     function VerificaVendaAberta: Boolean;
@@ -434,7 +435,7 @@ begin
     StatusCaixa := 3;
   end;
   FDataModule.ACBrECF.CarregaFormasPagamento;
-  //
+
   if FDataModule.ACBrECF.FormasPagamento.Count <= 0 then
   begin
     Application.MessageBox('ECF sem formas de pagamento cadastradas. Aplicação será aberta para somente consulta.', 'Informação do Sistema', MB_OK + MB_ICONINFORMATION);
@@ -445,36 +446,32 @@ end;
 procedure TFCaixa.PegaConfiguracao;     // modificar
 var
   Linha:string;
-  PosBarra: integer;
 begin
   Configuracao := TConfiguracaoController.PegaConfiguracao;
 
-  Linha:=Configuracao.ConfiguracaoBalanca;                                                              //acrescentar
+  Linha:=Configuracao.ConfiguracaoBalanca;
 
-  if Length(linha)>10 then                                                                              //acrescentar
-  begin                                                                                                 //acrescentar
-    try                                                                                                 //acrescentar
-      Configuracao.BalancaModelo := StrToInt(DevolveConteudoDelimitado('|',Linha));                     //acrescentar
-      Configuracao.BalancaIdentificadorBalanca := DevolveConteudoDelimitado('|',Linha);                 //acrescentar
-      Configuracao.BalancaDigitosUsadosCodigoBalanca := StrToInt(DevolveConteudoDelimitado('|',Linha)); //acrescentar
-      Configuracao.BalancaDigitosUsadosPrecoQtde := StrToInt(DevolveConteudoDelimitado('|',Linha));     //acrescentar
-      Configuracao.BalancavPesoOuValor := DevolveConteudoDelimitado('|',Linha);                         //acrescentar
-      Configuracao.BalancaHandShaking := StrToInt(DevolveConteudoDelimitado('|',Linha));                //acrescentar
-      Configuracao.BalancaParity := StrToInt(DevolveConteudoDelimitado('|',Linha));                     //acrescentar
-      Configuracao.BalancaStopBits := StrToInt(DevolveConteudoDelimitado('|',Linha));                   //acrescentar
-      Configuracao.BalancaDataBits := StrToInt(DevolveConteudoDelimitado('|',Linha));                   //acrescentar
-      Configuracao.BalancaBaudRate := StrToInt(DevolveConteudoDelimitado('|',Linha));                   //acrescentar
-      Configuracao.BalancaPortaSerial := DevolveConteudoDelimitado('|',Linha);                          //acrescentar
-      Configuracao.BalancaTimeOut := StrToInt(DevolveConteudoDelimitado('|',Linha));                    //acrescentar
-      Configuracao.BalancaTipoConfiguracaoBalanca := StrToInt(DevolveConteudoDelimitado('|',Linha));    //acrescentar
-    except                                                                                              //acrescentar
-      Configuracao.BalancaModelo :=0;                                                                   //acrescentar
-      exit;                                                                                             //acrescentar
-    end;                                                                                                //acrescentar
-  end else                                                                                              //acrescentar
-  begin                                                                                                 //acrescentar
-    Configuracao.BalancaModelo := 0;                                                                    //acrescentar
-  end;                                                                                                  //acrescentar
+  if Length(linha)>10 then
+  begin
+    try
+      Configuracao.BalancaModelo := StrToInt(DevolveConteudoDelimitado('|',Linha));
+      Configuracao.BalancaIdentificadorBalanca := DevolveConteudoDelimitado('|',Linha);
+      Configuracao.BalancaHandShaking := StrToInt(DevolveConteudoDelimitado('|',Linha));
+      Configuracao.BalancaParity := StrToInt(DevolveConteudoDelimitado('|',Linha));
+      Configuracao.BalancaStopBits := StrToInt(DevolveConteudoDelimitado('|',Linha));
+      Configuracao.BalancaDataBits := StrToInt(DevolveConteudoDelimitado('|',Linha));
+      Configuracao.BalancaBaudRate := StrToInt(DevolveConteudoDelimitado('|',Linha));
+      Configuracao.BalancaPortaSerial := DevolveConteudoDelimitado('|',Linha);
+      Configuracao.BalancaTimeOut := StrToInt(DevolveConteudoDelimitado('|',Linha));
+      Configuracao.BalancaTipoConfiguracaoBalanca := DevolveConteudoDelimitado('|',Linha);
+    except
+      Configuracao.BalancaModelo :=0;
+      exit;
+    end;
+  end else
+  begin
+    Configuracao.BalancaModelo := 0;
+  end;
 
 end;
 
@@ -491,7 +488,7 @@ var
   PosicaoComponente : TPosicaoComponentesVO;
   NomeComponente : String;
 begin
-  ListaPosicoes := TObjectList<TPosicaoComponentesVO>.Create(True);
+//  ListaPosicoes := TObjectList<TPosicaoComponentesVO>.Create(True);
   ListaPosicoes := TConfiguracaoController.VerificaPosicaoTamanho;
 
   for j := 0 to componentcount - 1 do
@@ -526,6 +523,10 @@ begin
   FCaixa.Top := 0;
   FCaixa.Width := Configuracao.ResolucaoVO.Largura;
   FCaixa.Height := Configuracao.ResolucaoVO.Altura;
+
+  // Ao mudar a resolução de 1024x768 para 800x600, tem um bug da qual o panel
+  // não é redimencionado, a linha abaixo resolve este problema.
+  FCaixa.AutoSize := True;
 end;
 
 function TFCaixa.VerificaVendaAberta: Boolean;
@@ -705,22 +706,22 @@ begin
  // Consider using 'CharInSet' function in 'SysUtils' unit.
  // Albert, como fazer para não receber Warning?
  If (ssctrl in shift) and (chr(Key) in ['B','b'])   then  //acrescentar    acho que devemos criar um painel a exemplo dos f1, f2 ...
- begin                                                    //acrescentar
+ begin
     if Configuracao.BalancaModelo > 0 then                //acrescentar
-    begin                                                 //acrescentar
-      BalancaLePeso:=true;                                //acrescentar
-      ACBrBAL1.LePeso(Configuracao.BalancaTimeOut);       //acrescentar
-      editCodigo.Text:='';                                //acrescentar
-      editCodigo.SetFocus;                                //acrescentar
+    begin
+      BalancaLePeso:=true;
+      ACBrBAL1.LePeso(Configuracao.BalancaTimeOut);
+      editCodigo.Text:='';
+      editCodigo.SetFocus;
     end;                                                  //acrescentar
   end;
 
 end;
 
-procedure TFCaixa.FormShow(Sender: TObject);   //acrescentar
-begin                                          //acrescentar
+procedure TFCaixa.FormShow(Sender: TObject);
+begin
   BalancaLePeso:=false;                       //acrescentar
-end;                                          //acrescentar
+end;
 
 procedure TFCaixa.AcionaMenuPrincipal;
 begin
@@ -760,8 +761,6 @@ begin
   else
     Application.MessageBox('Terminal em Estado Somente Consulta.', 'Informação do Sistema', MB_OK + MB_ICONINFORMATION);
 end;
-
-
 
 procedure TFCaixa.AcionaMenuFiscal;
 begin
@@ -1466,7 +1465,6 @@ begin
   if (StatusCaixa = 1) and (trim(editCodigo.Text)<>'') then
   begin
     editCodigo.SetFocus;
-   // keybd_event(VK_Return, 0, 0, 0);
     IniciaVendaDeItens;  // modificar para contornar o problema do foco ir para editquantidade, conforme observado no EAD
   end;
 end;
@@ -1513,7 +1511,7 @@ begin
         try
           if (FImportaNumero.ShowModal = MROK) then
           begin
-            Vendedor := TFuncionarioVO.Create;
+         //   Vendedor := TFuncionarioVO.Create;
             Vendedor := TVendedorController.ConsultaVendedor(StrToInt(FImportaNumero.EditEntrada.Text));
             if Vendedor.Id <> 0 then
               VendaCabecalho.IdVendedor := Vendedor.Id
@@ -1594,116 +1592,80 @@ end;
 procedure TFCaixa.IniciaVendaDeItens;
 var
   Unitario, Quantidade, Total: Extended;
-  vTipo:integer;
-  vCodigoDeBarraOuDescricaoOuIdProduto: string;
-  vPreco, vQtde: Extended;
 begin
-      if StatusCaixa <> 3 then
+  if StatusCaixa <> 3 then
+  begin
+    if UECF.ImpressoraOK then
+    begin
+      if MenuAberto = 0 then
       begin
-        if UECF.ImpressoraOK then
+        if StatusCaixa = 0 then
+          IniciaVenda;
+        if trim(editCodigo.Text) <> '' then
         begin
-          if MenuAberto = 0 then
+          DesmembraCodigoDigitado(trim(editCodigo.Text));
+          Application.ProcessMessages;
+
+          if Produto.Id <> 0 then
           begin
-            if StatusCaixa = 0 then
-              IniciaVenda;
-            if trim(editCodigo.Text) <> '' then
+            if Produto.ValorVenda <= 0 then     // modificar para resolver problema do item no cupom http://www.t2ti.com/ead/mod/forum/post.php?reply=17428
             begin
-              vCodigoDeBarraOuDescricaoOuIdProduto:=trim(editCodigo.Text);
-              vpreco:=0;
-              vQtde:=0;
-
-              vTipo:= DesmembraCodigoDigitado(vCodigoDeBarraOuDescricaoOuIdProduto, vPreco,vQtde);
-
-              case vTipo of     //modificar   -  tirei algumas coisas daqui e coloquei no  DesmembraCodigoDigitado, para facilitar
-                0:begin
-                  MensagemDeProdutoNaoEncontrado;
-                  abort;
-                end;
-
-                3:begin
-                  Application.CreateForm(TFImportaProduto, FImportaProduto);
-                  FImportaProduto.EditLocaliza.Text:= vCodigoDeBarraOuDescricaoOuIdProduto;
-                  FImportaProduto.ShowModal;
-                  if (Length(DevolveInteiro(editCodigo.text))) = (Length(trim(editCodigo.text))) then
-                  begin
-                    Produto.Id :=0;
-                    ConsultaProdutoId(StrToInt64(editCodigo.text));
-                  end else
-                  begin
-                    MensagemDeProdutoNaoEncontrado;
-                    abort;
-                  end;
-                end;
-
-              end;
-              Application.ProcessMessages;
-
-              if Produto.Id <> 0 then
-              begin
-                labelMensagens.Caption:='Venda em andamento...';
-                if vQtde > 0  then
-                   editQuantidade.Value:= vQtde;
-
-                if vpreco > 0 then
-                   editQuantidade.Text:= FormataFloat('Q',(vPreco/Produto.ValorVenda));
-
-                if (Produto.PodeFracionarUnidade = 'N') and (Frac(StrToFloat(EditQuantidade.Text))>0) then
-                begin
-                  Application.MessageBox('Produto não pode ser vendido com quantidade fracionada.', 'Informação do Sistema', MB_OK + MB_ICONINFORMATION);
-                  editUnitario.Text := '0';
-                  editTotalItem.Text := '0';
-                  editQuantidade.Text := '1';
-                  labelDescricaoProduto.Caption := '';
-                  editCodigo.Text := '';
-                  editCodigo.SetFocus;
-                end
-                else
-                begin
-                  editUnitario.Text := FormataFloat('V',Produto.ValorVenda);
-                  labelDescricaoProduto.Caption := Produto.DescricaoPDV;
-                  //carrega imagem do produto
-                  if FileExists(Configuracao.CaminhoImagensProdutos + Produto.GTIN + '.jpg') then        // modificar
-                    imageProduto.Picture.LoadFromFile(Configuracao.CaminhoImagensProdutos + Produto.GTIN + '.jpg')   // modificar
-                  else
-                    imageProduto.Picture.LoadFromFile(Configuracao.CaminhoImagensProdutos + 'padrao.png');      // modificar
-
-                  {if FileExists(Configuracao.CaminhoImagensProdutos + editCodigo.Text + '.jpg') then
-                    imageProduto.Picture.LoadFromFile(Configuracao.CaminhoImagensProdutos + editCodigo.Text + '.jpg')
-                  else
-                    imageProduto.Picture.LoadFromFile(Configuracao.CaminhoImagensProdutos + 'padrao.png'); }
-
-// modificar -->  Albert, acho que aqui no Configuracao.CaminhoImagensProdutos deveriamos utilizar o  Produto.id
-// em vez de Produto.GTIN pois do contrario, teriamos que obrigar o preenchimento do campo GTIN
-// alterei  CompoeItemParaVenda para usar   Produto.id quando  Produto.GTIN não existir
-// se for manter  GTIN obrigatório, tem que usar  Produto.GTIN no lugar de  editCodigo.Text para mostrar as imagens!
-
-                  Unitario := StrToFloat(editUnitario.Text);
-                  Quantidade := StrToFloat(editQuantidade.Text);
-
-                  Total := TruncaValor(Unitario * Quantidade, Constantes.TConstantes.DECIMAIS_VALOR);
-                  editTotalItem.Text := FormataFloat('V', Total);
-
-                  VendaDetalhe := TVendaDetalheVO.Create;
-                  VendeItem;
-                  SubTotal := SubTotal + VendaDetalhe.ValorTotal;
-                  TotalGeral := TotalGeral + VendaDetalhe.ValorTotal;
-                  AtualizaTotais;
-                  editCodigo.Clear;
-                  editCodigo.SetFocus;
-                  editQuantidade.Text := '1';
-                  Application.ProcessMessages;
-                end;
-              end
-              else
-              begin
-                 MensagemDeProdutoNaoEncontrado;
-              end;
+              Application.MessageBox('Produto não pode ser vendido com valor Zerado ou negativo!', 'Informação do Sistema', MB_OK + MB_ICONINFORMATION);
+              abort;
             end;
+            labelMensagens.Caption:='Venda em andamento...';
+
+            if ACBrInStore1.Peso > 0  then
+               editQuantidade.Value:= ACBrInStore1.Peso;
+
+            if ACBrInStore1.Total > 0 then
+               editQuantidade.Text:= FormataFloat('Q',(ACBrInStore1.Total/Produto.ValorVenda));
+
+            if (Produto.PodeFracionarUnidade = 'N') and (Frac(StrToFloat(EditQuantidade.Text))>0) then
+            begin
+              Application.MessageBox('Produto não pode ser vendido com quantidade fracionada.', 'Informação do Sistema', MB_OK + MB_ICONINFORMATION);
+              editUnitario.Text := '0';
+              editTotalItem.Text := '0';
+              editQuantidade.Text := '1';
+              labelDescricaoProduto.Caption := '';
+              editCodigo.Text := '';
+              editCodigo.SetFocus;
+            end
+            else
+            begin
+              editUnitario.Text := FormataFloat('V',Produto.ValorVenda);
+              labelDescricaoProduto.Caption := Produto.DescricaoPDV;
+              //carrega imagem do produto
+              if FileExists(Configuracao.CaminhoImagensProdutos + Produto.GTIN + '.jpg') then        // modificar
+                imageProduto.Picture.LoadFromFile(Configuracao.CaminhoImagensProdutos + Produto.GTIN + '.jpg')   // modificar
+              else
+                imageProduto.Picture.LoadFromFile(Configuracao.CaminhoImagensProdutos + 'padrao.png');      // modificar
+
+              Unitario := StrToFloat(editUnitario.Text);
+              Quantidade := StrToFloat(editQuantidade.Text);
+
+              Total := TruncaValor(Unitario * Quantidade, Constantes.TConstantes.DECIMAIS_VALOR);
+              editTotalItem.Text := FormataFloat('V', Total);
+
+              VendaDetalhe := TVendaDetalheVO.Create;
+              VendeItem;
+              SubTotal := SubTotal + VendaDetalhe.ValorTotal;
+              TotalGeral := TotalGeral + VendaDetalhe.ValorTotal;
+              AtualizaTotais;
+              editCodigo.Clear;
+              editCodigo.SetFocus;
+              editQuantidade.Text := '1';
+              Application.ProcessMessages;
+            end;
+          end
+          else
+          begin
+             MensagemDeProdutoNaoEncontrado;
           end;
         end;
-      end
-
-
+      end;
+    end;
+  end
 end;
 
 procedure TFCaixa.ParametrosIniciaisVenda;
@@ -1749,34 +1711,26 @@ begin
   labelDescricaoProduto.Caption := '';
   editCodigo.SetFocus;
 end;
-// modificar     // function TFCaixa.DesmembraCodigoDigitado fiz varias alteraçoes, melhor copiar ela inteira
-function TFCaixa.DesmembraCodigoDigitado(var CodigoDeBarraOuDescricaoOuIdProduto: string; var Preco, Qtde: Extended): integer;
+//********************************************************************************* //
+// modificar     // function TFCaixa.DesmembraCodigoDigitado fiz varias alteraçoes  //
+//********************************************************************************* //
+procedure TFCaixa.DesmembraCodigoDigitado(CodigoDeBarraOuDescricaoOuIdProduto: string);
 
-var IdentificadorBalanca, vCodDescrId , vPesoOuValor:string;
-    DigitosBalanca, DigitosPrecoQtde, LengthInteiro, LengthCodigo :integer;
+var IdentificadorBalanca, vCodDescrId :string;
+    LengthInteiro, LengthCodigo :integer;
 
 begin
 
   IdentificadorBalanca := Configuracao.BalancaIdentificadorBalanca;
-  DigitosBalanca := Configuracao.BalancaDigitosUsadosCodigoBalanca;
-  DigitosPrecoQtde := Configuracao.BalancaDigitosUsadosPrecoQtde;
-  vPesoOuValor := Configuracao.BalancavPesoOuValor;
-
   vCodDescrId := CodigoDeBarraOuDescricaoOuIdProduto;
-  LengthInteiro := Length(DevolveInteiro(CodigoDeBarraOuDescricaoOuIdProduto));
-  LengthCodigo := Length(CodigoDeBarraOuDescricaoOuIdProduto);
-
-  Result:= 0;
+  LengthInteiro := Length(DevolveInteiro(vCodDescrId));
+  LengthCodigo := Length(vCodDescrId);
 
   try
     if (LengthInteiro = LengthCodigo) and (LengthCodigo <= 4) and (BalancaLePeso = True) then
     begin
-      ConsultaProduto(CodigoDeBarraOuDescricaoOuIdProduto,1);
-      if Produto.Id <> 0 then
-      begin
-        Result:=1;
-        exit;
-      end;
+      ConsultaProduto(vCodDescrId,1);
+      if Produto.Id <> 0 then   exit;
     end;
   finally
     BalancaLePeso := false;
@@ -1786,66 +1740,44 @@ begin
   begin
     if (LengthInteiro = 13) and (IdentificadorBalanca = Copy(vCodDescrId,1,1)) then
     begin
-
-      if vPesoOuValor = 'VALOR' then
-        Preco:=StrToFloat(Copy(vCodDescrId,13-DigitosPrecoQtde,DigitosPrecoQtde))/100
-      else
-        Qtde:=StrToFloat(Copy(vCodDescrId,13-DigitosPrecoQtde,DigitosPrecoQtde))/1000;
-
-      ConsultaProduto(Copy(vCodDescrId,2,DigitosBalanca),1);
-      if Produto.Id <> 0 then
-      begin
-        Result:=1;
-        exit;
-      end else
-      begin
-        Preco:=0;
-        Qtde:=0;
-      end;
+      ACBrInStore1.Codificacao := trim(Configuracao.BalancaTipoConfiguracaoBalanca);
+      ACBrInStore1.Desmembrar(trim(vCodDescrId));
+      ConsultaProduto(ACBrInStore1.Codigo,1);
+      if Produto.Id <> 0 then  exit;
     end;
     ConsultaProduto(vCodDescrId,2);
-    if Produto.Id <> 0 then
-    begin
-      Result:=2;
-      exit;
-    end else result:=0;
+    if Produto.Id <> 0 then  exit;
   end;
-  if (Result = 0) then
+  ConsultaProduto(vCodDescrId,3);
+  if Produto.Id <> 0 then exit;
+  if LengthInteiro = LengthCodigo then
   begin
-    ConsultaProduto(vCodDescrId,3);
-    if Produto.Id <> 0 then
+    ConsultaProdutoId(StrToInt64(copy(vCodDescrId,1,14)));
+    if Produto.Id <> 0 then  exit;
+  end else
+  begin
+    Application.CreateForm(TFImportaProduto, FImportaProduto);
+    FImportaProduto.EditLocaliza.Text:= vCodDescrId;
+    FImportaProduto.ShowModal;
+    if (Length(DevolveInteiro(editCodigo.text))) = (Length(trim(editCodigo.text))) then
     begin
-      Result:=5;
-      exit;
-    end;
-    if LengthInteiro = LengthCodigo then
-    begin
-      ConsultaProdutoId(StrToInt64(copy(vCodDescrId,1,14)));
-      if Produto.Id <> 0 then
-      begin
-        Result:=4;
-        exit;
-      end;
+      Produto.Id :=0;
+      ConsultaProdutoId(StrToInt64(editCodigo.text));
     end else
     begin
-      CodigoDeBarraOuDescricaoOuIdProduto:=vCodDescrId;
-      Result:= 3;
+      MensagemDeProdutoNaoEncontrado;
+      abort;
     end;
   end;
-
 end;
-// modificar     // function TFCaixa.DesmembraCodigoDigitado fiz varias alteraçoes, melhor copiar ela inteira
 
 procedure TFCaixa.editCodigoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);  // modificar
 begin
-  case key of
-     VK_RETURN : IniciaVendaDeItens;  // modificar para contornar o problema do foco ir para editquantidade, conforme observado no EAD
+  case key of     // modificar para contornar o problema do foco ir para editquantidade, conforme observado no EAD
+     VK_RETURN :  if trim(editCodigo.Text)<>'' then IniciaVendaDeItens;
   end;
 
 end;
-
-
-
 
 procedure TFCaixa.VendeItem;
 begin
@@ -1966,9 +1898,6 @@ begin
   TelaPadrao;
 end;
 
-
-
-
 procedure TFCaixa.editCodigoKeyPress(Sender: TObject; var Key: Char);
 var
   Quantidade: Extended;
@@ -2075,8 +2004,8 @@ begin
             Application.MessageBox('Login - dados incorretos.', 'Informação do Sistema', MB_OK + MB_ICONINFORMATION);
         end;
       finally
-          if Assigned(FLoginGerenteSupervisor) then
-            FLoginGerenteSupervisor.Free;
+        if Assigned(FLoginGerenteSupervisor) then
+           FLoginGerenteSupervisor.Free;
       end;
     end
     else
@@ -2392,8 +2321,9 @@ begin
 end;
 
 
-// modificar  //acrescentar  // procedures para ler peso direto das balanças componente ACBrBal
-
+//****************************************************************************//
+// Procedimentos para ler peso direto das balanças componente ACBrBal         //
+//****************************************************************************//
 procedure TFCaixa.ConectaComBalanca;    // novo procedimento balança
 begin
   // se houver conecção aberta, Fecha a conecção
@@ -2414,7 +2344,6 @@ begin
    ACBrBAL1.Ativar;
 end;
 
-// modificar   //acrescentar
 procedure TFCaixa.ACBrBAL1LePeso(Peso: Double; Resposta: AnsiString);   // novo procedimento balança
 var valid : integer;
 begin
