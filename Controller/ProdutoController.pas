@@ -30,7 +30,7 @@ OTHER DEALINGS IN THE SOFTWARE.
        The author may be contacted at:
            t2ti.com@gmail.com</p>
 
-@author Albert Eije (T2Ti.COM) | José Rodrigues
+@author Albert Eije (T2Ti.COM) | Jose Rodrigues de Oliveira Junior
 @version 1.0
 *******************************************************************************}
 unit ProdutoController;
@@ -134,8 +134,8 @@ begin
     end;
     3:begin     // pesquisa pelo CODIGO_INTERNO ou GTIN
        clausulaWHERE:= 'where ' +
-                       ' (P.CODIGO_INTERNO = ' + QuotedStr(Codigo)+
-                       ')  or  (P.GTIN = ' + QuotedStr(copy(Codigo,1,14))+  ')' +
+                       ' ((P.CODIGO_INTERNO = ' + QuotedStr(Codigo)+ ')'+
+                       ' or  (P.GTIN = ' + QuotedStr(copy(Codigo,1,14))+  '))' +
                        ' and (P.ID_UNIDADE_PRODUTO = U.ID)';
     end;
 
@@ -164,6 +164,7 @@ begin
       ' PRODUTO P, ' +
       ' UNIDADE_PRODUTO U ' +
       clausulaWHERE;
+
   try
     try
       Query := TSQLQuery.Create(nil);

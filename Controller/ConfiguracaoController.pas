@@ -169,7 +169,7 @@ begin
 
       result := Configuracao;
     except
-      result := nil;
+      raise Exception.Create('Ocorreu um erro ao tentar ler as configurações');
     end;
   finally
     Query.Free;
