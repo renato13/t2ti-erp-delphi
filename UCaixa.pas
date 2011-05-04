@@ -1636,10 +1636,10 @@ begin
               editUnitario.Text := FormataFloat('V',Produto.ValorVenda);
               labelDescricaoProduto.Caption := Produto.DescricaoPDV;
               //carrega imagem do produto
-              if FileExists(Configuracao.CaminhoImagensProdutos + Produto.GTIN + '.jpg') then        // modificar
+              if FileExists(Configuracao.CaminhoImagensProdutos + Produto.GTIN + '.jpg') then                    // modificar
                 imageProduto.Picture.LoadFromFile(Configuracao.CaminhoImagensProdutos + Produto.GTIN + '.jpg')   // modificar
               else
-                imageProduto.Picture.LoadFromFile(Configuracao.CaminhoImagensProdutos + 'padrao.png');      // modificar
+                imageProduto.Picture.LoadFromFile(Configuracao.CaminhoImagensProdutos + 'padrao.png');            // modificar
 
               Unitario := StrToFloat(editUnitario.Text);
               Quantidade := StrToFloat(editQuantidade.Text);
@@ -1725,6 +1725,7 @@ begin
   vCodDescrId := CodigoDeBarraOuDescricaoOuIdProduto;
   LengthInteiro := Length(DevolveInteiro(vCodDescrId));
   LengthCodigo := Length(vCodDescrId);
+  ACBrInStore1.ZerarDados;
 
   try
     if (LengthInteiro = LengthCodigo) and (LengthCodigo <= 4) and (BalancaLePeso = True) then
@@ -1743,7 +1744,10 @@ begin
       ACBrInStore1.Codificacao := trim(Configuracao.BalancaTipoConfiguracaoBalanca);
       ACBrInStore1.Desmembrar(trim(vCodDescrId));
       ConsultaProduto(ACBrInStore1.Codigo,1);
-      if Produto.Id <> 0 then  exit;
+      if Produto.Id <> 0 then
+        exit
+      else
+        ACBrInStore1.ZerarDados;
     end;
     ConsultaProduto(vCodDescrId,2);
     if Produto.Id <> 0 then  exit;
