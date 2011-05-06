@@ -125,7 +125,6 @@ type
     ACBrInStore1: TACBrInStore;
     procedure DesmembraCodigoDigitado(CodigoDeBarraOuDescricaoOuIdProduto: string);  // modificar
     procedure MensagemDeProdutoNaoEncontrado;
-    procedure ConsultaProdutoId(id: Integer);
     procedure FechaMenuOperacoes;
     procedure CarregaPreVenda(Numero:String);
     procedure CarregaDAV(Numero:String);
@@ -1697,11 +1696,6 @@ begin
   Produto := TProdutoController.Consulta(Codigo,Tipo);
 end;
 
-procedure TFCaixa.ConsultaProdutoId(id: Integer);
-begin
-  Produto := TProdutoController.ConsultaId(Id);
-end;
-
 procedure TFCaixa.MensagemDeProdutoNaoEncontrado;
 begin
   Application.MessageBox('Código não encontrado.', 'Informação do Sistema', MB_OK + MB_ICONINFORMATION);
@@ -1756,7 +1750,7 @@ begin
   if Produto.Id <> 0 then exit;
   if LengthInteiro = LengthCodigo then
   begin
-    ConsultaProdutoId(StrToInt64(copy(vCodDescrId,1,14)));
+    ConsultaProduto(copy(vCodDescrId,1,14),4);
     if Produto.Id <> 0 then  exit;
   end else
   begin
@@ -1766,7 +1760,7 @@ begin
     if (Length(DevolveInteiro(editCodigo.text))) = (Length(trim(editCodigo.text))) then
     begin
       Produto.Id :=0;
-      ConsultaProdutoId(StrToInt64(editCodigo.text));
+      ConsultaProduto(trim(editCodigo.text),4);
     end else
     begin
       MensagemDeProdutoNaoEncontrado;
