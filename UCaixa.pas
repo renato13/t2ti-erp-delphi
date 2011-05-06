@@ -252,7 +252,8 @@ uses UPaf, UImportaNumero, UMesclaPreVenda, UEcf, UMesclaDAV, ULmfc, ULmfs,
   UConfiguracao, ConfiguracaoController, PosicaoComponentesVO, UImportaProduto,
   UMovimentoAberto, VendedorController, FuncionarioVO, SuprimentoVO, SangriaVO,
   PreVendaController, PreVendaDetalheVO, DAVDetalheVO, DAVController,
-  RegistroRController, ULoginGerenteSupervisor, UMovimentoECF, ACBrTEFDClass;
+  RegistroRController, ULoginGerenteSupervisor, UMovimentoECF, ACBrTEFDClass,
+  UCancelaPreVenda;
 var
   Produto: TProdutoVO;
   VendaDetalhe: TVendaDetalheVO;
@@ -1253,6 +1254,89 @@ begin
       FMesclaPreVenda.ShowModal;
     end;
 
+     // cancela pre-venda
+    if listaMenuOperacoes.ItemIndex = 2 then
+    begin
+      Application.CreateForm(TFCancelaPreVenda, FCancelaPreVenda);
+      FCancelaPreVenda.ShowModal;
+    end;
+
+    // carrega dav
+    if listaMenuOperacoes.ItemIndex = 3 then
+    begin
+      if StatusCaixa = 0 then
+      begin
+        Application.CreateForm(TFImportaNumero, FImportaNumero);
+        FImportaNumero.Caption := 'Carrega DAV (Orçamento)';
+        FImportaNumero.LabelEntrada.Caption := 'Informe o número do DAV (Orçamento)';
+        try
+          if (FImportaNumero.ShowModal = MROK) then
+            begin
+              FechaMenuOperacoes;
+              CarregaDAV(FImportaNumero.EditEntrada.Text);
+            end;
+        finally
+
+          if Assigned(FImportaNumero) then
+            FImportaNumero.Free;
+        end;
+      end
+      else
+        Application.MessageBox('Já existe uma venda em andamento.', 'Informação do Sistema', MB_OK + MB_ICONINFORMATION);
+    end;
+
+    // mesclar DAVs
+    if listaMenuOperacoes.ItemIndex = 4 then
+    begin
+      Application.CreateForm(TFMesclaDAV, FMesclaDAV);
+      FMesclaDAV.ShowModal;
+    end;
+
+  end;
+{  if Key = VK_ESCAPE then
+  begin
+    FechaMenuOperacoes;
+  end;
+
+  if Key = VK_UP then
+    MenuSetaAcima(listaMenuOperacoes.ItemIndex, listaMenuOperacoes);
+
+  if Key = VK_DOWN then
+    MenuSetaAbaixo(listaMenuOperacoes.ItemIndex, listaMenuOperacoes);
+
+  if Key = VK_RETURN then
+  begin
+
+    // carrega pre-venda
+    if listaMenuOperacoes.ItemIndex = 0 then
+    begin
+      if StatusCaixa = 0 then
+      begin
+        Application.CreateForm(TFImportaNumero, FImportaNumero);
+        FImportaNumero.Caption := 'Carrega Pré-Venda';
+        FImportaNumero.LabelEntrada.Caption := 'Informe o número da Pré-Venda';
+        try
+          if (FImportaNumero.ShowModal = MROK) then
+          begin
+            FechaMenuOperacoes;
+            CarregaPreVenda(FImportaNumero.EditEntrada.Text);
+          end;
+        finally
+          if Assigned(FImportaNumero) then
+            FImportaNumero.Free;
+        end;
+      end
+      else
+        Application.MessageBox('Já existe uma venda em andamento.', 'Informação do Sistema', MB_OK + MB_ICONINFORMATION);
+    end;
+
+    // mesclar pre-venda
+    if listaMenuOperacoes.ItemIndex = 1 then
+    begin
+      Application.CreateForm(TFMesclaPreVenda, FMesclaPreVenda);
+      FMesclaPreVenda.ShowModal;
+    end;
+
     // carrega dav
     if listaMenuOperacoes.ItemIndex = 2 then
     begin
@@ -1282,7 +1366,7 @@ begin
       Application.CreateForm(TFMesclaDAV, FMesclaDAV);
       FMesclaDAV.ShowModal;
     end;
-  end;
+  end; }
 end;
 
 procedure TFCaixa.FechaMenuOperacoes;

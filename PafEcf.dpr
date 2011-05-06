@@ -109,7 +109,8 @@ uses
   SpedFiscalController in 'Controller\SpedFiscalController.pas',
   SpedFiscalC425VO in 'VO\SpedFiscalC425VO.pas',
   SpedFiscalC490VO in 'VO\SpedFiscalC490VO.pas',
-  Constantes in 'Constantes.pas';
+  Constantes in 'Constantes.pas',
+  UCancelaPreVenda in 'UCancelaPreVenda.pas' {FCancelaPreVenda};
 
 {$R *.res}
 
@@ -118,5 +119,6 @@ begin
   Application.MainFormOnTaskbar := True;
   Application.Title := 'T2Ti PAF-ECF';
   Application.CreateForm(TFCaixa, FCaixa);
+  Application.CreateForm(TFCancelaPreVenda, FCancelaPreVenda);
   Application.Run;
 end.

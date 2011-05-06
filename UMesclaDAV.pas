@@ -119,7 +119,63 @@ begin
   EditCPFCNPJ.Text := CDSMestre.FieldByName('CPF_CNPJ_DESTINATARIO').AsString;
 end;
 
+
 procedure TFMesclaDAV.confirma;
+var
+  ListaDAVCabecalho: TObjectList<TDAVVO>;
+  ListaDAVDetalhe: TObjectList<TDAVDetalheVO>;
+  DAVCabecalho: TDAVVO;
+  DAVDetalhe: TDAVDetalheVO;
+begin
+  if Application.MessageBox('Tem certeza que deseja mesclar os DAV selecionados?', 'Mesclar DAV', Mb_YesNo + Mb_IconQuestion) = IdYes then
+  begin
+    if (EditDestinatario.Text <> '') and (EditCPFCNPJ.Text <> '') then
+    begin
+      FCaixa.labelMensagens.Caption := 'Aguarde. Mesclando DAV!';
+      ListaDAVCabecalho := TObjectList<TDAVVO>.Create;
+      ListaDAVDetalhe := TObjectList<TDAVDetalheVO>.Create;
+
+      CDSMestre.DisableControls;
+      CDSMestre.First;
+      while not CDSMestre.Eof do
+      begin
+        if CDSMestre.FieldByName('X').AsString = 'X' then
+        begin
+          DAVCabecalho := TDAVVO.Create;
+          DAVCabecalho.Id := CDSMestre.FieldByName('ID').AsInteger;
+          DAVCabecalho.NomeDestinatario := EditDestinatario.Text;
+          DAVCabecalho.CpfCnpjDestinatario := EditCPFCNPJ.Text;
+          ListaDAVCabecalho.Add(DAVCabecalho);
+
+          QDetalhe.Active := False;
+          QDetalhe.SQL.Clear;
+          QDetalhe.SQL.Add('SELECT * FROM ECF_DAV_DETALHE WHERE ID_ECF_DAV='+QuotedStr(CDSMestre.FieldByName('ID').AsString));
+          QDetalhe.Active := True;
+
+          QDetalhe.First;
+          while not QDetalhe.Eof do
+          begin
+            DAVDetalhe := TDAVDetalheVO.Create;
+            DAVDetalhe.IdDAV := QDetalhe.FieldByName('ID_ECF_DAV').AsInteger;
+            DAVDetalhe.IdProduto := QDetalhe.FieldByName('ID_PRODUTO').AsInteger;
+            DAVDetalhe.Quantidade := QDetalhe.FieldByName('QUANTIDADE').AsFloat;
+            DAVDetalhe.ValorUnitario := QDetalhe.FieldByName('VALOR_UNITARIO').AsFloat;
+            DAVDetalhe.ValorTotal := QDetalhe.FieldByName('VALOR_TOTAL').AsFloat;
+            ListaDAVDetalhe.Add(DAVDetalhe);
+            QDetalhe.Next;
+          end;
+        end;
+        CDSMestre.Next;
+      end;
+      TDAVController.MesclaDAV(ListaDAVCabecalho,ListaDAVDetalhe);
+      FCaixa.labelMensagens.Caption := 'Venda em andamento.';
+      Close;
+    end
+    else
+      Application.MessageBox('Nome e CPF/CNPJ do destinatário são obrigatórios.', 'Informação do Sistema', MB_OK + MB_ICONINFORMATION);
+  end;
+end;
+{procedure TFMesclaDAV.confirma;
 var
   ListaDAVCabecalho: TObjectList<TDAVVO>;
   ListaDAVDetalhe: TObjectList<TDAVDetalheVO>;
@@ -174,7 +230,7 @@ begin
     else
       Application.MessageBox('Nome e CPF/CNPJ do destinatário são obrigatórios.', 'Informação do Sistema', MB_OK + MB_ICONINFORMATION);
   end;
-end;
+end;    }
 
 procedure TFMesclaDAV.FormActivate(Sender: TObject);
 begin

@@ -62,10 +62,10 @@ begin
   //insere a PV no cabecalho
   ConsultaSQL :=
     'insert into ECF_PRE_VENDA_CABECALHO (' +
-    'DATA_HORA_PV,' +
+    'DATA_PV, HORA_PV,' +
     'VALOR,' +
     'SITUACAO) values (' +
-    ':pDataHoraEmissao,' +
+    ':pDataEmissao,:pHoraEmissao,' +
     ':pValor,' +
     ':pSituacao)';
   try
@@ -73,7 +73,8 @@ begin
       Query := TSQLQuery.Create(nil);
       Query.SQLConnection := FDataModule.Conexao;
       Query.sql.Text := ConsultaSQL;
-      Query.ParamByName('pDataHoraEmissao').AsString := FormatDateTime('yyyy-mm-dd hh:nn:ss', now);
+      Query.ParamByName('pDataEmissao').AsString := FormatDateTime('yyyy-mm-dd', now);
+      Query.ParamByName('pHoraEmissao').AsString := FormatDateTime('hh:nn:ss', now);
       Query.ParamByName('pValor').AsFloat := PreVendaCabecalho.Valor;
       Query.ParamByName('psituacao').AsString := 'P';
       Query.ExecSQL();

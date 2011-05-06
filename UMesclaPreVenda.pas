@@ -103,7 +103,7 @@ begin
   confirma;
 end;
 
-procedure TFMesclaPreVenda.confirma;
+{procedure TFMesclaPreVenda.confirma;
 var
   ListaPreVendaCabecalho: TObjectList<TPreVendaVO>;
   ListaPreVendaDetalhe: TObjectList<TPreVendaDetalheVO>;
@@ -153,7 +153,58 @@ begin
     FCaixa.FechaMenuOperacoes;
     Close;
   end;
+end; }
+procedure TFMesclaPreVenda.confirma;
+var
+  ListaPreVendaCabecalho: TObjectList<TPreVendaVO>;
+  ListaPreVendaDetalhe: TObjectList<TPreVendaDetalheVO>;
+  PreVendaCabecalho: TPreVendaVO;
+  PreVendaDetalhe: TPreVendaDetalheVO;
+begin
+  if Application.MessageBox('Tem certeza que deseja mesclar as Pré-Vendas selecionadas?', 'Mesclar Pré-Venda', Mb_YesNo + Mb_IconQuestion) = IdYes then
+  begin
+    FCaixa.labelMensagens.Caption := 'Aguarde. Mesclando Pré-Venda!';
+    ListaPreVendaCabecalho := TObjectList<TPreVendaVO>.Create;
+    ListaPreVendaDetalhe := TObjectList<TPreVendaDetalheVO>.Create;
+
+    CDSMestre.DisableControls;
+    CDSMestre.First;
+    while not CDSMestre.Eof do
+    begin
+      if CDSMestre.FieldByName('X').AsString = 'X' then
+      begin
+        PreVendaCabecalho := TPreVendaVO.Create;
+        PreVendaCabecalho.Id := CDSMestre.FieldByName('ID').AsInteger;
+        PreVendaCabecalho.Valor := CDSMestre.FieldByName('VALOR').AsFloat;
+        ListaPreVendaCabecalho.Add(PreVendaCabecalho);
+
+        QDetalhe.Active := False;
+        QDetalhe.SQL.Clear;
+        QDetalhe.SQL.Add('SELECT * FROM ECF_PRE_VENDA_DETALHE WHERE ID_ECF_PRE_VENDA_CABECALHO='+QuotedStr(CDSMestre.FieldByName('ID').AsString));
+        QDetalhe.Active := True;
+
+        QDetalhe.First;
+        while not QDetalhe.Eof do
+        begin
+          PreVendaDetalhe := TPreVendaDetalheVO.Create;
+          PreVendaDetalhe.ProdutoVO := TProdutoController.ConsultaId(QDetalhe.FieldByName('ID_PRODUTO').AsInteger);
+          PreVendaDetalhe.IdPreVenda := QDetalhe.FieldByName('ID_ECF_PRE_VENDA_CABECALHO').AsInteger;
+          PreVendaDetalhe.IdProduto := QDetalhe.FieldByName('ID_PRODUTO').AsInteger;
+          PreVendaDetalhe.Quantidade := QDetalhe.FieldByName('QUANTIDADE').AsFloat;
+          PreVendaDetalhe.ValorUnitario := QDetalhe.FieldByName('VALOR_UNITARIO').AsFloat;
+          PreVendaDetalhe.ValorTotal := QDetalhe.FieldByName('VALOR_TOTAL').AsFloat;
+          ListaPreVendaDetalhe.Add(PreVendaDetalhe);
+          QDetalhe.Next;
+        end;
+      end;
+      CDSMestre.Next;
+    end;
+    TPreVendaController.MesclaPreVenda(ListaPreVendaCabecalho,ListaPreVendaDetalhe);
+    FCaixa.labelMensagens.Caption := 'Venda em andamento.';
+    Close;
+  end;
 end;
+
 
 procedure TFMesclaPreVenda.FormActivate(Sender: TObject);
 begin

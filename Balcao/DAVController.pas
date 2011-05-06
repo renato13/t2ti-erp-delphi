@@ -64,12 +64,12 @@ begin
     'insert into ECF_DAV_CABECALHO (' +
     'NOME_DESTINATARIO,' +
     'CPF_CNPJ_DESTINATARIO,' +
-    'DATA_HORA_EMISSAO,' +
+    'DATA_EMISSAO, HORA_EMISSAO,' +
     'VALOR,' +
     'SITUACAO) values (' +
     ':pDestinatario,' +
     ':pCPFCNPJ,' +
-    ':pDataHoraEmissao,' +
+    ':pDataEmissao,:pHoraEmissao,' +
     ':pValor,' +
     ':pSituacao)';
   try
@@ -80,7 +80,8 @@ begin
       Query.ParamByName('pDestinatario').AsString := DAVCabecalho.NomeDestinatario;
       Query.ParamByName('pCPFCNPJ').AsString := DAVCabecalho.CpfCnpjDestinatario;
       Query.ParamByName('pValor').AsFloat := DAVCabecalho.Valor;
-      Query.ParamByName('pDataHoraEmissao').AsString := FormatDateTime('yyyy-mm-dd hh:nn:ss', now);
+      Query.ParamByName('pDataEmissao').AsString := FormatDateTime('yyyy-mm-dd', now);
+      Query.ParamByName('pHoraEmissao').AsString := FormatDateTime('hh:nn:ss', now);
       Query.ParamByName('pSituacao').AsString := 'P';
       Query.ExecSQL();
 

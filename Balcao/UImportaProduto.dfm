@@ -150,12 +150,6 @@ object FImportaProduto: TFImportaProduto
     Font.Style = [fsBold]
     ParentFont = False
   end
-  object JvEnterAsTab1: TJvEnterAsTab
-    Left = 22
-    Top = 274
-    Width = 28
-    Height = 28
-  end
   object botaoConfirma: TJvBitBtn
     Left = 349
     Top = 270
@@ -360,6 +354,10 @@ object FImportaProduto: TFImportaProduto
       TabOrder = 0
     end
   end
+  object JvEnterAsTab1: TJvEnterAsTab
+    Left = 22
+    Top = 274
+  end
   object QProduto: TSQLQuery
     Active = True
     MaxBlobSize = 1
@@ -382,7 +380,6 @@ object FImportaProduto: TFImportaProduto
     Top = 120
   end
   object CDSProduto: TClientDataSet
-    Active = True
     Aggregates = <>
     Params = <>
     ProviderName = 'DSPProduto'
@@ -390,10 +387,6 @@ object FImportaProduto: TFImportaProduto
     Top = 168
     object CDSProdutoID: TIntegerField
       FieldName = 'ID'
-      Required = True
-    end
-    object CDSProdutoID_ECF_TRIBUTOS: TIntegerField
-      FieldName = 'ID_ECF_TRIBUTOS'
       Required = True
     end
     object CDSProdutoID_UNIDADE_PRODUTO: TIntegerField
