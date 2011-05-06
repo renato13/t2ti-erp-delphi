@@ -180,7 +180,9 @@ begin
   end;
 end;
 
-class procedure TDAVController.MesclaDAV(ListaDAVCabecalho:TObjectList<TDAVVO>;ListaDAVDetalhe:TObjectList<TDAVDetalheVO>);
+{class procedure TDAVController.MesclaDAV(ListaDAVCabecalho:TObjectList<TDAVVO>;ListaDAVDetalhe:TObjectList<TDAVDetalheVO>);
+ class procedure TDAVController.MesclaDAV(ListaDAVCabecalho:TObjectList<TDAVVO>;ListaDAVDetalhe:TObjectList<TDAVDetalheVO>);
+
 var
   i:integer;
   NovoDAVCabecalho: TDAVVO;
@@ -287,7 +289,116 @@ begin
   end;
 
   FCaixa.CarregaDAV(IntToStr(NovoDAVCabecalho.Id));
+end; }
+class procedure TDAVController.MesclaDAV(ListaDAVCabecalho:TObjectList<TDAVVO>;ListaDAVDetalhe:TObjectList<TDAVDetalheVO>);
+var
+  i:integer;
+  NovoDAVCabecalho: TDAVVO;
+begin
+  //inicia e configura o novo DAV
+  NovoDAVCabecalho := TDAVVO.Create;
+  NovoDAVCabecalho.NomeDestinatario := TDAVVO(ListaDAVCabecalho.Items[0]).NomeDestinatario;
+  NovoDAVCabecalho.CpfCnpjDestinatario := TDAVVO(ListaDAVCabecalho.Items[0]).CpfCnpjDestinatario;
+  NovoDAVCabecalho.DataEmissao := FormatDateTime('yyyy-mm-dd', now);
+  NovoDAVCabecalho.HoraEmissao := FormatDateTime('hh:nn:ss', now);
+  NovoDAVCabecalho.Situacao := 'P';
+
+  //atualiza a tabela de cabecalho
+  for i := 0 to ListaDAVCabecalho.Count - 1 do
+  begin
+    //altera a situacao do DAV selecionado para M de mesclado
+    ConsultaSQL :=
+      'update ECF_DAV_CABECALHO set ' +
+      'SITUACAO=:pSituacao '+
+      ' where ID = :pId';
+
+      try
+        try
+          Query := TSQLQuery.Create(nil);
+          Query.SQLConnection := FDataModule.Conexao;
+          Query.sql.Text := ConsultaSQL;
+          Query.ParamByName('pId').AsInteger := TDAVVO(ListaDAVCabecalho.Items[i]).Id;
+          Query.ParamByName('pSituacao').AsString := 'M';
+          Query.ExecSQL();
+        except
+        end;
+      finally
+        Query.Free;
+      end;
+  end;
+
+  //cria um novo dav
+  ConsultaSQL :=
+    'insert into ECF_DAV_CABECALHO (' +
+    'NOME_DESTINATARIO,' +
+    'CPF_CNPJ_DESTINATARIO,' +
+    'DATA_EMISSAO,' +
+    'HORA_EMISSAO,' +
+    'SITUACAO) values (' +
+    ':pDestinatario,' +
+    ':pCPFCNPJ,' +
+    ':pDataEmissao,' +
+    ':pHoraEmissao,' +
+    ':psituacao)';
+  try
+    try
+      Query := TSQLQuery.Create(nil);
+      Query.SQLConnection := FDataModule.Conexao;
+      Query.sql.Text := ConsultaSQL;
+      Query.ParamByName('pDestinatario').AsString := NovoDAVCabecalho.NomeDestinatario;
+      Query.ParamByName('pCPFCNPJ').AsString := NovoDAVCabecalho.CpfCnpjDestinatario;
+      Query.ParamByName('pDataEmissao').AsString := NovoDAVCabecalho.DataEmissao;
+      Query.ParamByName('pHoraEmissao').AsString := NovoDAVCabecalho.HoraEmissao;
+      Query.ParamByName('psituacao').AsString := NovoDAVCabecalho.Situacao;
+      Query.ExecSQL();
+
+      ConsultaSQL := 'select max(ID) as ID from ECF_DAV_CABECALHO';
+      Query.sql.Text := ConsultaSQL;
+      Query.Open();
+
+      NovoDAVCabecalho.Id := Query.FieldByName('ID').AsInteger;
+    except
+    end;
+  finally
+    Query.Free;
+  end;
+
+  //atualiza a tabela de detalhes
+  ConsultaSQL :=
+    'insert into ECF_DAV_DETALHE (' +
+    'ID_PRODUTO,' +
+    'ID_ECF_DAV,' +
+    'QUANTIDADE,' +
+    'VALOR_UNITARIO,' +
+    'VALOR_TOTAL) values (' +
+    ':pIdProduto,' +
+    ':pIdDav,' +
+    ':pQuantidade,' +
+    ':pValorUnitario,' +
+    ':pValorTotal)';
+  try
+    try
+      Query := TSQLQuery.Create(nil);
+      Query.SQLConnection := FDataModule.Conexao;
+      Query.sql.Text := ConsultaSQL;
+      for i := 0 to ListaDAVDetalhe.Count - 1 do
+      begin
+        Query.ParamByName('pIdProduto').AsInteger := TDAVDetalheVO(ListaDAVDetalhe.Items[i]).IdProduto;
+        Query.ParamByName('pIdDav').AsInteger := NovoDAVCabecalho.Id;
+        Query.ParamByName('pQuantidade').AsFloat := TDAVDetalheVO(ListaDAVDetalhe.Items[i]).Quantidade;
+        Query.ParamByName('pValorUnitario').AsFloat := TDAVDetalheVO(ListaDAVDetalhe.Items[i]).ValorUnitario;
+        Query.ParamByName('pValorTotal').AsFloat := TDAVDetalheVO(ListaDAVDetalhe.Items[i]).ValorTotal;
+        Query.ExecSQL();
+      end;
+    except
+    end;
+  finally
+    Query.Free;
+  end; //alterei a partir daqui
+  FCaixa.FechaMenuOperacoes;
+  FCaixa.CarregaDAV(IntToStr(NovoDAVCabecalho.Id));
 end;
+
 
 class function TDAVController.ListaDAVPeriodo(DataInicio:String; DataFim:String): TObjectList<TDAVVO>;
 var

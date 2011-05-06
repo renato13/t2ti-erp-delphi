@@ -153,108 +153,6 @@ begin
   end;
 end;
 
-{class procedure TPreVendaController.MesclaPreVenda(ListaPreVendaCabecalho:TObjectList<TPreVendaVO>;ListaPreVendaDetalhe:TObjectList<TPreVendaDetalheVO>);
-var
-  i:integer;
-  NovaPreVenda: TPreVendaVO;
-begin
-  //inicia e configura a nova Pre-Venda
-  NovaPreVenda := TPreVendaVO.Create;
-  NovaPreVenda.DataEmissao := FormatDateTime('yyyy-mm-dd', now);
-  NovaPreVenda.HoraEmissao := FormatDateTime('hh:nn:ss', now);
-  NovaPreVenda.Situacao := 'P';
-
-  //atualiza a tabela de cabecalho
-  for i := 0 to ListaPreVendaCabecalho.Count - 1 do
-  begin
-    //altera a situacao da PV selecionada para M de mesclada
-    ConsultaSQL :=
-      'update ECF_PRE_VENDA_CABECALHO set ' +
-      'SITUACAO=:pSituacao '+
-      ' where ID = :pId';
-
-      try
-        try
-          Query := TSQLQuery.Create(nil);
-          Query.SQLConnection := FDataModule.Conexao;
-          Query.sql.Text := ConsultaSQL;
-          Query.ParamByName('pId').AsInteger := TPreVendaVO(ListaPreVendaCabecalho.Items[i]).Id;
-          Query.ParamByName('pSituacao').AsString := 'M';
-          Query.ExecSQL();
-        except
-        end;
-      finally
-        Query.Free;
-      end;
-  end;
-
-  //cria uma nova PV
-  ConsultaSQL :=
-    'insert into ECF_PRE_VENDA_CABECALHO (' +
-    'DATA_PV,' +
-    'HORA_PV,' +
-    'SITUACAO) values (' +
-    ':pDataEmissao,' +
-    ':pHoraEmissao,' +
-    ':psituacao)';
-  try
-    try
-      Query := TSQLQuery.Create(nil);
-      Query.SQLConnection := FDataModule.Conexao;
-      Query.sql.Text := ConsultaSQL;
-      Query.ParamByName('pDataEmissao').AsString := NovaPreVenda.DataEmissao;
-      Query.ParamByName('pHoraEmissao').AsString := NovaPreVenda.HoraEmissao;
-      Query.ParamByName('psituacao').AsString := NovaPreVenda.Situacao;
-      Query.ExecSQL();
-
-      ConsultaSQL := 'select max(ID) as ID from ECF_PRE_VENDA_CABECALHO';
-      Query.sql.Text := ConsultaSQL;
-      Query.Open();
-
-      NovaPreVenda.Id := Query.FieldByName('ID').AsInteger;
-    except
-    end;
-  finally
-    Query.Free;
-  end;
-
-  //atualiza a tabela de detalhes
-  ConsultaSQL :=
-    'insert into ECF_PRE_VENDA_DETALHE (' +
-    'ID_PRODUTO,' +
-    'ID_ECF_PRE_VENDA_CABECALHO,' +
-    'QUANTIDADE,' +
-    'VALOR_UNITARIO,' +
-    'VALOR_TOTAL) values (' +
-    ':pIdProduto,' +
-    ':pIdPreVenda,' +
-    ':pQuantidade,' +
-    ':pValorUnitario,' +
-    ':pValorTotal)';
-  try
-    try
-      Query := TSQLQuery.Create(nil);
-      Query.SQLConnection := FDataModule.Conexao;
-      Query.sql.Text := ConsultaSQL;
-      for i := 0 to ListaPreVendaDetalhe.Count - 1 do
-      begin
-        Query.ParamByName('pIdProduto').AsInteger := TPreVendaDetalheVO(ListaPreVendaDetalhe.Items[i]).IdProduto;
-        Query.ParamByName('pIdPreVenda').AsInteger := NovaPreVenda.Id;
-        Query.ParamByName('pQuantidade').AsFloat := TPreVendaDetalheVO(ListaPreVendaDetalhe.Items[i]).Quantidade;
-        Query.ParamByName('pValorUnitario').AsFloat := TPreVendaDetalheVO(ListaPreVendaDetalhe.Items[i]).ValorUnitario;
-        Query.ParamByName('pValorTotal').AsFloat := TPreVendaDetalheVO(ListaPreVendaDetalhe.Items[i]).ValorTotal;
-        Query.ExecSQL();
-      end;
-    except
-    end;
-  finally
-    Query.Free;
-  end;
-
-  CancelaPreVendasPendentes(ListaPreVendaCabecalho, ListaPreVendaDetalhe);
-  FCaixa.FechaMenuOperacoes;
-  FCaixa.CarregaPreVenda(IntToStr(NovaPreVenda.Id));
-end; }
 class procedure TPreVendaController.MesclaPreVenda(ListaPreVendaCabecalho:TObjectList<TPreVendaVO>;ListaPreVendaDetalhe:TObjectList<TPreVendaDetalheVO>);
 var
   i:integer;
@@ -351,7 +249,7 @@ begin
     end;
   finally
     Query.Free;
-  end; //a partir daqui
+  end;
 
   CancelaPreVendasPendentes(ListaPreVendaCabecalho, ListaPreVendaDetalhe);
   FCaixa.FechaMenuOperacoes;

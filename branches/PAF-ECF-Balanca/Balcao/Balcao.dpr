@@ -16,7 +16,8 @@ uses
   UPreVenda in 'UPreVenda.pas' {FPreVenda},
   PreVendaVO in '..\VO\PreVendaVO.pas',
   PreVendaDetalheVO in '..\VO\PreVendaDetalheVO.pas',
-  ProdutoVO in '..\VO\ProdutoVO.pas';
+  ProdutoVO in '..\VO\ProdutoVO.pas',
+  Constantes in 'Constantes.pas';
 
 {$R *.res}
 

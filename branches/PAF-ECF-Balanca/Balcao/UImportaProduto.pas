@@ -42,7 +42,7 @@ uses
   Dialogs, Grids, DBGrids, JvExDBGrids, JvDBGrid, StdCtrls, JvExStdCtrls,
   JvButton, JvCtrls, Buttons, JvExButtons, JvBitBtn, pngimage, ExtCtrls, Mask,
   JvEdit, JvValidateEdit, JvDBSearchEdit, DB, Provider, DBClient, FMTBcd,
-  SqlExpr, Biblioteca, JvExControls, JvEnterTab;
+  SqlExpr, Biblioteca, JvExControls, JvEnterTab, JvComponentBase;
 
 type
   TFImportaProduto = class(TForm)
@@ -61,7 +61,6 @@ type
     JvEnterAsTab1: TJvEnterAsTab;
     CDSProduto: TClientDataSet;
     CDSProdutoID: TIntegerField;
-    CDSProdutoID_ECF_TRIBUTOS: TIntegerField;
     CDSProdutoID_UNIDADE_PRODUTO: TIntegerField;
     CDSProdutoGTIN: TStringField;
     CDSProdutoCODIGO_INTERNO: TStringField;
