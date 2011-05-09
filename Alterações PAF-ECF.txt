@@ -1,0 +1,14 @@
+Alterações PAF-ECF
+
+***********************************************************************************************************
+09/05/2011
+acrescentada na Unit Biblioteca a function VersaoExe(exe, param : string): String; 
+
+modificada a Unit Ucaixa para chamar a functiom VersaoExe
+
+panelTitulo.Caption := Configuracao.TituloTelaCaixa+'   '+VersaoExe(Application.ExeName,'V');  
+
+serve para mostrar no PAF-ECF a versão atual e servirá para a atualização de todos os executaveis da rede.
+
+
+***********************************************************************************************************
