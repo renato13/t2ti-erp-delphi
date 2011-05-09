@@ -304,7 +304,7 @@ begin
   SetTaskBar(false);
   pegaConfiguracao;
   ConfiguraConstantes;
-  panelTitulo.Caption := Configuracao.TituloTelaCaixa;
+  panelTitulo.Caption := Configuracao.TituloTelaCaixa+'   '+VersaoExe(Application.ExeName,'V');
   imagePrincipal.Picture.LoadFromFile(Configuracao.CaminhoImagensLayout + Configuracao.ResolucaoVO.ImagemTela);
   imagePanelMenuPrincipal.Picture.LoadFromFile(Configuracao.CaminhoImagensLayout + Configuracao.ResolucaoVO.ImagemMenu);
   imagePanelMenuOperacoes.Picture.LoadFromFile(Configuracao.CaminhoImagensLayout + Configuracao.ResolucaoVO.ImagemMenu);

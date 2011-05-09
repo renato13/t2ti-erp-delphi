@@ -61,6 +61,7 @@ function FormataFloat(Tipo:String; Valor: Extended): string; //Tipo => 'Q'=Quant
 procedure Split(const Delimiter: Char; Input: string; const Strings: TStrings);
 function DevolveInteiro(Const Texto:String):String;
 function DevolveConteudoDelimitado(Delimidador:string;var Linha:string):string;
+function VersaoExe(exe, param : string): String;  // acrescentar
 
 var
    InString : String;
@@ -531,5 +532,52 @@ begin
   Result:=Copy(Linha,1,PosBarra-1);
   Delete(Linha,1,PosBarra);
 end;
+
+function VersaoExe(exe, param : string): String;   // acrescentar
+type
+   PFFI = ^vs_FixedFileInfo;
+var
+  F : PFFI;
+  Handle : Dword;
+  Len : Longint;
+  Data : Pchar;
+  Buffer : Pointer;
+  Tamanho : Dword;
+  Parquivo: Pchar;
+
+begin
+
+  Parquivo := StrAlloc(Length(Exe) + 1);
+  StrPcopy(Parquivo, Exe);
+  Len := GetFileVersionInfoSize(Parquivo, Handle);
+  Result := '';
+  if Len > 0 then
+  begin
+    Data:=StrAlloc(Len+1);
+    if GetFileVersionInfo(Parquivo,Handle,Len,Data) then
+    begin
+      VerQueryValue(Data, '\',Buffer,Tamanho);
+      F := PFFI(Buffer);
+      if param = 'N' then
+      begin
+        Result := Format('%d%d%d%d',
+        [HiWord(F^.dwFileVersionMs),
+        LoWord(F^.dwFileVersionMs),
+        HiWord(F^.dwFileVersionLs),
+        Loword(F^.dwFileVersionLs)]);
+      end else if param = 'V' then
+      begin
+        Result := Format('%d.%d.%d.%d',
+        [HiWord(F^.dwFileVersionMs),
+        LoWord(F^.dwFileVersionMs),
+        HiWord(F^.dwFileVersionLs),
+        Loword(F^.dwFileVersionLs)]);
+      end
+    end;
+    StrDispose(Data);
+  end;
+  StrDispose(Parquivo);
+end;
+
 
 end.
