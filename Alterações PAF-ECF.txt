@@ -1,4 +1,6 @@
-Alterações PAF-ECF
+Alterações PAF-ECF Branches
+
+https://t2ti-erp-delphi.googlecode.com/svn/branches/
 
 ***********************************************************************************************************
 09/05/2011
@@ -12,3 +14,26 @@ serve para mostrar no PAF-ECF a versão atual e servirá para a atualização de tod
 
 
 ***********************************************************************************************************
+10/05/2011
+Acrescentado campos na tabela ecf_resolucao conforme sugestão do colega Jorge Antonio Ribeiro Ferreira 
+
+  `HOTTRACK_COLOR` varchar(20) DEFAULT NULL,
+  `ITEM_STYLE_FONT_NAME` varchar(20) DEFAULT NULL,
+  `ITEM_STYLE_FONT_COLOR` varchar(20) DEFAULT NULL,
+  `ITEM_SEL_STYLE_COLOR` varchar(20) DEFAULT NULL,
+  `LABEL_TOTAL_GERAL_FONT_COLOR` varchar(20) DEFAULT NULL,
+  `ITEM_STYLE_FONT_STYLE` varchar(20) DEFAULT NULL
+
+acrescentada na Unit UCaixa o procedimento:
+
+procedure TFCaixa.ConfiguraCores; 
+
+alterada Unit UCaixa o procedimento procedure TFCaixa.FormCreate(Sender: TObject);
+
+para chamar ConfiguraCores; 
+
+Alterado unit ResolucaoVO e a unit ConfiguracaoController  para acrescentar os campos criados.
+
+script com dados na pasta \PAF-ECF-Balanca\Script\com_view.sql
+*************************************************************************************************************
+

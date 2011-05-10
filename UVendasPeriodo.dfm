@@ -129,12 +129,6 @@ object FVendasPeriodo: TFVendasPeriodo
       89A5483D01DFB998FB2D3A81EB31BE2670BDC7D704AEF7F81FAF27F01401E982
       E70000000049454E44AE426082}
   end
-  object JvEnterAsTab1: TJvEnterAsTab
-    Left = 24
-    Top = 128
-    Width = 28
-    Height = 28
-  end
   object RadioGroup2: TRadioGroup
     Left = 80
     Top = 9
@@ -459,5 +453,9 @@ object FVendasPeriodo: TFVendasPeriodo
           'C '#8211' Perfil C')
       end
     end
+  end
+  object JvEnterAsTab1: TJvEnterAsTab
+    Left = 24
+    Top = 128
   end
 end
