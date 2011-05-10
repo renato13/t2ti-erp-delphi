@@ -41,7 +41,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, Grids, DBGrids, JvExDBGrids, JvDBGrid, StdCtrls, JvExStdCtrls,
   JvButton, JvCtrls, Buttons, JvExButtons, JvBitBtn, pngimage, ExtCtrls, Mask,
-  JvEdit, JvValidateEdit, JvExControls, JvEnterTab, ComCtrls;
+  JvEdit, JvValidateEdit, JvExControls, JvEnterTab, ComCtrls, JvComponentBase;
 
 type
   TFVendasPeriodo = class(TForm)

@@ -48,6 +48,15 @@ type
     FIMAGEM_MENU: String;
     FIMAGEM_SUBMENU: String;
 
+    // Acrescentar
+    FHOTTRACK_COLOR: String;
+    FITEM_STYLE_FONT_NAME: String;
+    FITEM_STYLE_FONT_COLOR: String;
+    FITEM_SEL_STYLE_COLOR: String;
+    FLABEL_TOTAL_GERAL_FONT_COLOR: String;
+    FITEM_STYLE_FONT_STYLE: String;
+    // Até aqui
+
 
   published
 
@@ -58,6 +67,15 @@ type
     property ImagemTela: String read FIMAGEM_TELA write FIMAGEM_TELA;
     property ImagemMenu: String read FIMAGEM_MENU write FIMAGEM_MENU;
     property ImagemSubMenu: String read FIMAGEM_SUBMENU write FIMAGEM_SUBMENU;
+
+     // Acrescentar
+    property HotTrackColor: String read FHOTTRACK_COLOR write FHOTTRACK_COLOR;
+    property ItemStyleFontName: String read FITEM_STYLE_FONT_NAME write FITEM_STYLE_FONT_NAME;
+    property ItemStyleFontColor: String read FITEM_STYLE_FONT_COLOR write FITEM_STYLE_FONT_COLOR;
+    property ItemSelStyleColor: String read FITEM_SEL_STYLE_COLOR write FITEM_SEL_STYLE_COLOR;
+    property LabelTotalGeralFontColor: String read FLABEL_TOTAL_GERAL_FONT_COLOR write FLABEL_TOTAL_GERAL_FONT_COLOR;
+    property ItemStyleFontStyle: String read FITEM_STYLE_FONT_STYLE write FITEM_STYLE_FONT_STYLE;
+    // Até aqui
 
 end;
 

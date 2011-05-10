@@ -219,6 +219,7 @@ type
     procedure ConectaComBalanca;
     procedure ACBrBAL1LePeso(Peso: Double; Resposta: AnsiString);    //acrescentar
     procedure FormShow(Sender: TObject);    //acrescentar
+    procedure ConfiguraCores;
   private
     BalancaLePeso:boolean;    //acrescentar
     procedure ShowHint(Sender: TObject);
@@ -313,6 +314,7 @@ begin
 
   setResolucao;
   ConfiguraACBr;
+  ConfiguraCores;
   Application.ProcessMessages;
 
   Timer2.Enabled := True;
@@ -479,6 +481,48 @@ procedure TFCaixa.ConfiguraConstantes;
 begin
   Constantes.TConstantes.DECIMAIS_QUANTIDADE := Configuracao.DecimaisQuantidade;
   Constantes.TConstantes.DECIMAIS_VALOR := Configuracao.DecimaisValor;
+end;
+
+procedure TFCaixa.ConfiguraCores;  // Acrescentar
+begin
+
+  listaMenuPrincipal.HotTrackColor := StringToColor(Configuracao.ResolucaoVO.HotTrackColor);
+  listaMenuPrincipal.ItemStyle.Font.Name := Configuracao.ResolucaoVO.ItemStyleFontName;
+  listaMenuPrincipal.ItemStyle.Font.Color := StringToColor(Configuracao.ResolucaoVO.ItemStyleFontColor);
+  listaMenuPrincipal.ItemSelStyle.Color := StringToColor(Configuracao.ResolucaoVO.ItemSelStyleColor);
+
+  listaMenuOperacoes.HotTrackColor := StringToColor(Configuracao.ResolucaoVO.HotTrackColor);
+  listaMenuOperacoes.ItemStyle.Font.Name := Configuracao.ResolucaoVO.ItemStyleFontName;
+  listaMenuOperacoes.ItemStyle.Font.Color := StringToColor(Configuracao.ResolucaoVO.ItemStyleFontColor);
+  listaMenuOperacoes.ItemSelStyle.Color := StringToColor(Configuracao.ResolucaoVO.ItemSelStyleColor);
+
+  listaMenuFiscal.HotTrackColor := StringToColor(Configuracao.ResolucaoVO.HotTrackColor);
+  listaMenuFiscal.ItemStyle.Font.Name := Configuracao.ResolucaoVO.ItemStyleFontName;
+  listaMenuFiscal.ItemStyle.Font.Color := StringToColor(Configuracao.ResolucaoVO.ItemStyleFontColor);
+  listaMenuFiscal.ItemSelStyle.Color := StringToColor(Configuracao.ResolucaoVO.ItemSelStyleColor);
+
+  listaGerente.HotTrackColor := StringToColor(Configuracao.ResolucaoVO.HotTrackColor);
+  listaGerente.ItemStyle.Font.Name := Configuracao.ResolucaoVO.ItemStyleFontName;
+  listaGerente.ItemStyle.Font.Color := StringToColor(Configuracao.ResolucaoVO.ItemStyleFontColor);
+  listaGerente.ItemSelStyle.Color := StringToColor(Configuracao.ResolucaoVO.ItemSelStyleColor);
+
+  listaSupervisor.HotTrackColor := StringToColor(Configuracao.ResolucaoVO.HotTrackColor);
+  listaSupervisor.ItemStyle.Font.Name := Configuracao.ResolucaoVO.ItemStyleFontName;
+  listaSupervisor.ItemStyle.Font.Color := StringToColor(Configuracao.ResolucaoVO.ItemStyleFontColor);
+  listaSupervisor.ItemSelStyle.Color := StringToColor(Configuracao.ResolucaoVO.ItemSelStyleColor);
+
+
+
+  if Configuracao.ResolucaoVO.ItemStyleFontStyle = '' then
+  listaMenuPrincipal.ItemStyle.Font.Style   := [];
+  if Configuracao.ResolucaoVO.ItemStyleFontStyle = 'NEGRITO' then
+  listaMenuPrincipal.ItemStyle.Font.Style   := [fsBold];
+  if Configuracao.ResolucaoVO.ItemStyleFontStyle = 'ITALICO' then
+  listaMenuPrincipal.ItemStyle.Font.Style   := [fsItalic];
+  if Configuracao.ResolucaoVO.ItemStyleFontStyle = 'SUBLINHADO' then
+  listaMenuPrincipal.ItemStyle.Font.Style   := [fsUnderLine];
+
+  labelTotalGeral.Font.Color := StringToColor(Configuracao.ResolucaoVO.LabelTotalGeralFontColor);
 end;
 
 procedure TFCaixa.SetResolucao;

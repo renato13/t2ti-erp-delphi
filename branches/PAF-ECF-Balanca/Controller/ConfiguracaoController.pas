@@ -107,7 +107,14 @@ begin
   ConsultaSQL :=
       'select ' +
         'C.ID_ECF_RESOLUCAO, R.RESOLUCAO_TELA, R.LARGURA, R.ALTURA, R.IMAGEM_TELA, ' +
-        'R.IMAGEM_MENU, R.IMAGEM_SUBMENU, C.ID_ECF_IMPRESSORA, C.ID_ECF_CAIXA, ' +
+        'R.IMAGEM_MENU, R.IMAGEM_SUBMENU,' +
+         // Acrescentar
+        'R.HOTTRACK_COLOR, R.ITEM_STYLE_FONT_NAME,   R.ITEM_STYLE_FONT_STYLE,'+
+        'R.ITEM_STYLE_FONT_COLOR, R.ITEM_SEL_STYLE_COLOR, R.LABEL_TOTAL_GERAL_FONT_COLOR, ' +
+        // Até aqui
+
+
+        'C.ID_ECF_IMPRESSORA, C.ID_ECF_CAIXA, ' +
         'C.ID_ECF_EMPRESA, C.MENSAGEM_CUPOM, C.PORTA_ECF, C.PORTA_PINPAD, ' +
         'C.PORTA_BALANCA, C.IP_SERVIDOR, C.IP_SITEF, C.MARKETING_ATIVO, '+
         'C.TIPO_TEF, C.TITULO_TELA_CAIXA, C.SINCRONIZADO, C.COR_JANELAS_INTERNAS, '+
@@ -166,6 +173,16 @@ begin
       Configuracao.ResolucaoVO.ResolucaoTela := Query.FieldByName('RESOLUCAO_TELA').AsString;
       Configuracao.ResolucaoVO.Largura := Query.FieldByName('LARGURA').AsInteger;
       Configuracao.ResolucaoVO.Altura := Query.FieldByName('ALTURA').AsInteger;
+
+      // Acrescentar
+      Configuracao.ResolucaoVO.HotTrackColor := Query.FieldByName('HOTTRACK_COLOR').AsString;
+      Configuracao.ResolucaoVO.ItemStyleFontName := Query.FieldByName('ITEM_STYLE_FONT_NAME').AsString;
+      Configuracao.ResolucaoVO.ItemStyleFontColor := Query.FieldByName('ITEM_STYLE_FONT_COLOR').AsString;
+      Configuracao.ResolucaoVO.ItemSelStyleColor := Query.FieldByName('ITEM_SEL_STYLE_COLOR').AsString;
+      Configuracao.ResolucaoVO.LabelTotalGeralFontColor := Query.FieldByName('LABEL_TOTAL_GERAL_FONT_COLOR').AsString;
+      Configuracao.ResolucaoVO.ItemStyleFontStyle := Query.FieldByName('ITEM_STYLE_FONT_STYLE').AsString;
+      // Até aqui
+
 
       result := Configuracao;
     except

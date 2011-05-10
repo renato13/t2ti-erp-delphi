@@ -512,7 +512,7 @@ begin
           R04.IdOperador := Query.FieldByName('ID_ECF_OPERADOR').AsInteger;
           R04.CCF := Query.FieldByName('CCF').AsInteger;
           R04.COO := Query.FieldByName('COO').AsInteger;
-          R04.DataEmissao := Query.FieldByName('DATA_HORA_VENDA').AsString;
+          R04.DataEmissao := Query.FieldByName('DATA_VENDA').AsString;
           R04.SubTotal := Query.FieldByName('VALOR_VENDA').AsFloat;
           R04.Desconto := Query.FieldByName('DESCONTO').AsFloat;
           R04.IndicadorDesconto := 'V';
